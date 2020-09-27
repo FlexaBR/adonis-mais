@@ -2,9 +2,14 @@
 const Workshop = use('App/Models/Workshop');
 
 class WorkshopController {
-  async index() {
+  async index({ request }) {
+    // input - busca procura tanto no body, como nos query params
+    // se não informar a seção pega a seção 1
+    const section = request.input('section', 1);
+
     // builder: campos que retornarão
     const workshops = await Workshop.query()
+      .where('section', section)
       .with('user', (builder) => {
         builder.select(['id', 'username', 'avatar']);
       })
@@ -31,7 +36,13 @@ class WorkshopController {
   }
 
   async store({ request, response }) {
-    const data = request.only(['title', 'description', 'user_id', 'section']);
+    const data = request.only([
+      'title',
+      'color',
+      'description',
+      'user_id',
+      'section',
+    ]);
 
     const workshop = await Workshop.create(data);
 
@@ -39,7 +50,13 @@ class WorkshopController {
   }
 
   async update({ request, params }) {
-    const data = request.only(['title', 'description', 'user_id', 'section']);
+    const data = request.only([
+      'title',
+      'color',
+      'description',
+      'user_id',
+      'section',
+    ]);
 
     const workshop = await Workshop.find(params.id);
 
