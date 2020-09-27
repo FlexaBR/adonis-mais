@@ -14,6 +14,7 @@ class ResetPasswordController {
         .status(400)
         .json({ error: 'Invalid date range, please try again.' });
     }
+
     const user = await userToken.user().fetch();
 
     user.password = password;
